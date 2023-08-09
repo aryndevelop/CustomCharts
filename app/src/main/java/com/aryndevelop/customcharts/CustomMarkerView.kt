@@ -22,12 +22,6 @@ class CustomMarkerView(context: Context?, layoutResource: Int, var isPie: Boolea
 
     init {
         txtViewData = findViewById(R.id.txtViewData)
-        if (isStaggeredBarChart) {
-            txtViewDataOnTrip = findViewById(R.id.txtViewDataOnTrip)
-            txtViewDataAvailable = findViewById(R.id.txtViewDataAvailable)
-            txtViewDataTotal = findViewById(R.id.txtViewDataTotal)
-        }
-
     }
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.aryndevelop.customcharts.databinding.ActivityMainBinding
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -42,19 +43,12 @@ class MainActivity : AppCompatActivity() {
                 barChartView.invalidate()
             }
             else {
-                val xAxisFormatter = IndexAxisValueFormatter(vehicleType)
-                val xAxis = barChartView.xAxis
-                xAxis.position = XAxis.XAxisPosition.BOTTOM // set xAxis to bottom
-                xAxis.typeface = gilroyMedium // set font to xAxis labels
-                xAxis.setDrawGridLines(false) // hide gridlines of xXis
-                xAxis.granularity = 1f // only intervals of 1 day
-                xAxis.textSize = 10f
-                xAxis.textColor = Color.parseColor("#555555")
-                xAxis.valueFormatter = xAxisFormatter
 
                 val barDataSet = BarDataSet(barEntries, "")
-                barDataSet.highLightColor = Color.TRANSPARENT;
+                // hide highlight
+                barDataSet.highLightColor = Color.TRANSPARENT
                 barDataSet.highLightAlpha = 0
+
                 val colorClassArray = mutableListOf(Color.parseColor("#db3700"))
                 barDataSet.colors = colorClassArray
 
@@ -67,10 +61,9 @@ class MainActivity : AppCompatActivity() {
                 val barChartRender = CustomBarChartRenderer(barChartView, barChartView.animator, barChartView.viewPortHandler, 15)
                 barChartView.renderer = barChartRender
 
-                val marker = CustomMarkerView(
-                    this@MainActivity, R.layout.custom_bar_graph_maker_layout,
+                val marker = CustomMarkerView(this@MainActivity, R.layout.custom_graph_maker_layout,
                     isPie = false,
-                    isStaggeredBarChart = true
+                    isStaggeredBarChart = false
                 )
                 barChartView.marker = marker
                 barChartView.setDrawMarkers(true)
@@ -87,36 +80,40 @@ class MainActivity : AppCompatActivity() {
                 l.textColor = Color.BLACK
                 l.xEntrySpace = 15f // set the space between the legend entries on the x-axis
 
-/*                val stack1 = BaseApplication.applicationContext()
-                    ?.getColor(R.color.staggered_bar_chart_color2)
-                    ?.let {
-                        LegendEntry(
-                            "On trip",
-                            Legend.LegendForm.CIRCLE,
-                            10f,
-                            2f,
-                            null,
-                            it
-                        )
-                    }
-                val stack2 = BaseApplication.applicationContext()
-                    ?.getColor(R.color.staggered_bar_chart_color1)
-                    ?.let {
-                        LegendEntry(
-                            "Available",
-                            Legend.LegendForm.CIRCLE,
-                            10f,
-                            2f,
-                            null,
-                            it
-                        )
-                    }
+                val xAxisFormatter = IndexAxisValueFormatter(vehicleType)
+                val xAxis = barChartView.xAxis
+                xAxis.position = XAxis.XAxisPosition.BOTTOM // set xAxis to bottom
+                xAxis.typeface = gilroyMedium // set font to xAxis labels
+                xAxis.setDrawGridLines(false) // hide gridlines of xXis
+                xAxis.granularity = 1f // only intervals of 1 day
+                xAxis.textSize = 10f
+                xAxis.textColor = Color.parseColor("#555555")
+                xAxis.valueFormatter = xAxisFormatter
 
+                // set range to show values5
+                barChartView.setVisibleXRangeMaximum(6f)
+
+                val barSpace = 0.05f
+                val groupSpace = 0.3f
+                barChartView.axisLeft.axisMinimum = 0f
+                barChartView.axisRight.axisMinimum = 0f
+                barChartView.axisRight.isEnabled = false // remove right axis lines
+                barChartView.axisLeft.isEnabled = false // remove line axis lines
                 // set custom labels and colors
-                l.setCustom(mutableListOf(stack1, stack2))*/
-                barChartView.setVisibleXRangeMaximum(4f)
+                val stack1 = LegendEntry("On trip", Legend.LegendForm.CIRCLE, 10f, 2f, null, Color.parseColor("#db3700"))
+                l.setCustom(mutableListOf(stack1))
+
+                barChartView.description.isEnabled = false
+
+                barChartView.xAxis.setDrawLabels(true)
+                barChartView.extraBottomOffset = 10f
+                barChartView.setPinchZoom(false)
+                barChartView.setScaleEnabled(false)
+                barChartView.notifyDataSetChanged()
+                barChartView.invalidate()
             }
         }
+
     }
 
 }

@@ -12,18 +12,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textAppearance="@style/TextAppearance.VTS.BodyMedium"
         android:textColor="@color/white"
+        android:textSize="14sp"
         android:background="@drawable/edit_button_bg"
         android:backgroundTint="@color/black"
-        android:paddingHorizontal="19sp"
-        android:paddingVertical="12sp"
+        android:paddingHorizontal="19dp"
+        android:paddingVertical="12dp"
         android:gravity="center"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_gragh_marker"
+        android:src="@drawable/ic_arrow_drop_down"
         android:rotation="90"
         android:layout_gravity="center"/>
 </LinearLayout>
