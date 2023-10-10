@@ -25,29 +25,59 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val foodCount = arrayListOf(4f, 10f, 1f, 6f, 0f, 2.5f, 3f, 7f, 0.5f, 0f, 2f)
-        val foodType = arrayListOf("agriculture", "bean", "cultivate", "dairy food", "domesticate", "grain", "honey", "nut", "poultry", "raise", "seafood")
+        //Sample Data
+        var foodData = arrayListOf(
+            FoodData(4, "agriculture"),
+            FoodData(10, "bean"),
+            FoodData(1, "cultivate"),
+            FoodData(6, "dairy food"),
+            FoodData(0, "domesticate"),
+            FoodData(2, "grain"),
+            FoodData(3, "honey"),
+            FoodData(7, "nut"),
+            FoodData(1, "poultry"),
+            FoodData(9, "raise"),
+        )
 
-        barChart(binding.barChartView, FoodData(food1 = foodCount, foodType = foodType))
+        barChart(binding.barChartView, foodData)
 
     }
 
     data class FoodData(
-        var food1: ArrayList<Float>? = arrayListOf(),
-        var food2: ArrayList<Float>? = arrayListOf(),
-        var foodType: ArrayList<String>? = arrayListOf()
+        var food1: Int? = null,
+        var foodType: String? = null,
+        var food2: Int? = null,
     )
 
-    private fun barChart(barChartView: BarChart, foodData: FoodData) {
+    private fun barChart(barChartView: BarChart, foodData: ArrayList<FoodData>?, isStaggeredBarChart: Boolean = false) {
         val barEntries = ArrayList<BarEntry>()
+        val foodListType = java.util.ArrayList<String>()
 
-        foodData.food1?.forEachIndexed { index, value -> barEntries.add(BarEntry(index.toFloat(), value)) }
+
+        if (!isStaggeredBarChart) {
+            foodData?.forEachIndexed { index, value ->
+                barEntries.add(BarEntry(index.toFloat(), value.food1?.toFloat() ?: 0f))
+                foodListType.add(value.foodType ?: "null")
+            }
+        } else {
+            foodData?.forEachIndexed { index, value ->
+                barEntries.add(
+                    BarEntry(index.toFloat(), floatArrayOf(
+                            value.food1?.toFloat() ?: 0f,
+                            value.food2?.toFloat() ?: 0f,
+                        )
+                    )
+                )
+                foodListType.add(value.foodType ?: "null")
+            }
+        }
+
 
         // get font from assets folder
         val gilroyMedium = Typeface.createFromAsset(assets, "font/gilroy_medium.ttf")
 
         binding.apply {
-            if (foodData.food1?.isEmpty() == true) {
+            if (foodData?.isEmpty() == true) {
                 barChartView.setNoDataText("No chart data available")
                 barChartView.setNoDataTextTypeface(gilroyMedium)
                 barChartView.setNoDataTextColor(Color.BLACK)
@@ -92,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 l.textColor = Color.BLACK
                 l.xEntrySpace = 15f // set the space between the legend entries on the x-axis
 
-                val xAxisFormatter = IndexAxisValueFormatter(foodData.foodType)
+                val xAxisFormatter = IndexAxisValueFormatter(foodListType)
                 val xAxis = barChartView.xAxis
                 xAxis.position = XAxis.XAxisPosition.BOTTOM // set xAxis to bottom
                 xAxis.typeface = gilroyMedium // set font to xAxis labels
